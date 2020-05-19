@@ -9,7 +9,7 @@
 
 int main(int ac, char **av)
 {
-    if (ac == 1)
-        open_read(av);
+    if (ac != 1)
+        return (84);
     return (0);
 }

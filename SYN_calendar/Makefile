@@ -5,11 +5,7 @@
 ## Makefile
 ##
 
-SRC		=		src/main.c \
-				src/lib2.c \
-				src/lib.c \
-				src/str_to_word_tab.c \
-				src/open_read.c
+SRC		=		src/main.c
 
 OBJ		=		$(SRC:.c=.o)
 
