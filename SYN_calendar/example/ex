@@ -1,0 +1,30 @@
+./calendar 2>devnull <input
+
+******************************
+MEETING
+date: 13/04/2034
+place: F-67100
+with Pamela Anderson, David Hasselhoff, Gena LeeNolin
+******************************
+MEETING
+date: 14/04/2034
+place: F-59330
+with Pamela Anderson, Gena LeeNolin
+******************************
+Pamela Anderson
+position: DDR
+city: F-31000
+meeting on 13/04/2034, F-67100, with David Hasselhoff, Gena LeeNolin
+meeting on 14/04/2034, F-59330, with Gena LeeNolin
+******************************
+Pamela Anderson
+position: DDR
+city: F-31000
+meeting on 13/04/2034, F-67100, with David Hasselhoff, Gena LeeNolin
+meeting on 14/04/2034, F-59330, with Gena LeeNolin
+******************************
+Gena LeeNolin
+position: DDR
+city: F-94270
+meeting on 13/04/2034, F-67100, with Pamela Anderson, David Hasselhoff
+meeting on 14/04/2034, F-59330, with Pamela Anderson

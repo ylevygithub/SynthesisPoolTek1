@@ -1,0 +1,19 @@
+./calendar 2>devnull < input
+
+******************************
+Pamela Anderson
+position: DDR
+city: F-31000
+meeting on 25/12/2034, F-57000, with David Hasselhoff, Gena LeeNolin
+******************************
+David Hasselhoff
+position: PDG
+city: F-13000
+meeting on 01/05/2034, F-46800, with Gena LeeNolin
+meeting on 25/12/2034, F-57000, with Pamela Anderson, Gena LeeNolin
+******************************
+Gena LeeNolin
+position: DDR
+city: F-94270
+meeting on 01/05/2034, F-46800, with David Hasselhoff
+meeting on 25/12/2034, F-57000, with Pamela Anderson, David Hasselhoff
