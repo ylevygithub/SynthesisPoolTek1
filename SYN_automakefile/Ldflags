@@ -1,0 +1,10 @@
+LDFLAGS = -I./calc/calc.h fakeProj.h
+
+
+#source_filename;main.c salut.c truc.c
+main.c;main.h salut.h
+PROJECT_DIR;./fakeProj/
+SOURCES_DIR;src/
+HEADERS_DIR;include/
+EXEC;doom
+CC;gcc

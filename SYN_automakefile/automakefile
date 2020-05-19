@@ -1,0 +1,105 @@
+#!/bin/bash
+# $() = ``
+
+#verif parametre
+if [ $# != 1 ] ; then
+  echo "Error : need one parameter."
+  exit 84
+fi
+
+# on recupere le parametre 1 dans la var config_file
+config_file=$1
+
+#fichier n existe pas
+if [ ! -f $config_file ] ; then
+  echo "File \"$config_file\" doesn't exist."
+  exit 84
+fi
+#fichier non accessible
+if [ ! -r $config_file ] ; then
+  echo "File \"$config_file\" is not accessible."
+  exit 84
+fi
+
+# on gere project_dir dans la var PROJECT_DIR
+PROJECT_DIR=$(cat $config_file | grep PROJECT_DIR | cut -d ";" -f2)
+
+if [ -z $PROJECT_DIR ] ; then
+  echo "File \"$PROJECT_DIR\" doesn't exist."
+  exit 84
+fi
+
+if [ ! -d $PROJECT_DIR ] ; then
+  echo "Directory \"$PROJECT_DIR\" doesn't exist."
+  exit 84
+fi
+
+#on crée le Makefile dans le project_dir
+> ./$PROJECT_DIR/Makefile
+#affichage de projectdir dans Makefile
+echo -e "PROJECT_DIR\t=\t$PROJECT_DIR\n" >> ./$PROJECT_DIR/Makefile
+
+# on gere sources_dir dans la var PROJECT_DIR
+SOURCES_DIR=$(cat $config_file | grep SOURCES_DIR | cut -d ";" -f2)
+#affichage de SOURCES_DIR dans Makefile
+echo -e "SRC\t=\t$SOURCES_DIR/\$(wildcard *.c)\n" >> ./$PROJECT_DIR/Makefile
+
+
+
+# on gere sources_dir dans la var PROJECT_DIR
+CFLAGS=$(cat $config_file | grep CFLAGS | cut -d ";" -f2)
+#affichage de CFLAGS dans Makefile
+echo -e "CFLAGS\t=\t$CFLAGS\n" >> ./$PROJECT_DIR/Makefile
+
+
+#on gere source_filename
+#source_filename=$(cat $config_file | grep $*.c | cut -d ";" -f2)#remplacer grep source_filename par les .c se trouvant dans config_file
+#c_files=$source_filename
+
+#nbre de .c  exemples : main.c \ truc.c
+#nbr_words=$(echo $c_files | wc -w)
+
+#filename=$(echo $c_files | cut -d " " -f1)
+#echo -e "SRC\t\t\t=\t$PROJECT_DIR$SOURCES_DIR$filename \\" >> ./$PROJECT_DIR/Makefile
+#for i in `seq 2 $(($nbr_words-1))`;
+#do      filename=$(echo $c_files | cut -d " " -f$i)
+#        echo -e "\t\t\t\t$PROJECT_DIR$SOURCES_DIR$filename \\" >> ./$PROJECT_DIR/Makefile
+#done
+#filename=$(echo $c_files | cut -d " " -f$nbr_words)
+#echo -e "\t\t\t\t$PROJECT_DIR$SOURCES_DIR$filename\n" >> ./$PROJECT_DIR/Makefile
+
+
+#OBJ
+echo -e "OBJ\t\t\t=\t\$(SRC:.c=.o)\n" >> ./$PROJECT_DIR/Makefile
+
+
+HEADERS_DIR=$(cat $config_file | grep HEADERS_DIR | cut -d ";" -f2)
+echo -e "HEADERS_DIR\t=\t$HEADERS_DIR\n" >> ./$PROJECT_DIR/Makefile
+
+CC=$(cat $config_file | grep CC | cut -d ";" -f2)
+echo -e "CC\t=\t$CC\n" >> ./$PROJECT_DIR/Makefile
+
+EXEC=$(cat $config_file | grep EXEC | cut -d ";" -f2)
+echo -e "EXEC\t=\t$EXEC\n" >> ./$PROJECT_DIR/Makefile
+
+echo -e "all:	\$(EXEC)\n" >> ./$PROJECT_DIR/Makefile
+echo -e "\$(EXEC):	\$(OBJ)\n	\$(CC) -o \$(EXEC) \$(SRC) \$(CFLAGS)\n" >> ./$PROJECT_DIR/Makefile
+
+#archive
+BACKUP=$(cat $config_file | grep BCK_DIR | cut -d ";" -f2)
+ZIP=$(cat $config_file | grep "^ZIP;" | cut -d ";" -f2)
+ZIPFLAGS=$(cat $config_file | grep ^ZIPFLAGS | cut -d ";" -f2)
+echo -e "archive:\n	$ZIP $ZIPFLAGS test.tar ../$PROJECT_DIR\n\tmv test.tar $BACKUP\n" >> ./$PROJECT_DIR/Makefile
+echo -e '\t@echo -e "test.tar file generated."\n' >> ./$PROJECT_DIR/Makefile
+
+#delete
+echo -e "delete:\n\trm -f ./$BACKUP/test.tar\n" >> ./$PROJECT_DIR/Makefile
+
+#revert
+UNZIP=$(cat $config_file | grep "^UNZIP;" | cut -d ";" -f2)
+UNZIPFLAGS=$(cat $config_file | grep ^UNZIPFLAGS | cut -d ";" -f2)
+echo -e "revert:\n	$UNZIP $UNZIPFLAGS $BACKUP/test.tar\n" >> ./$PROJECT_DIR/Makefile
+
+echo -e "clean:\n\trm -f \$(OBJ)\n\trm -f *.gcno\n\trm -f *~\n\trm -f $BACKUP/test.tar\n" >> ./$PROJECT_DIR/Makefile
+echo -e "fclean:	clean\n	rm -f \$(EXEC)\n" >> ./$PROJECT_DIR/Makefile
+echo -e "re:	fclean all" >> ./$PROJECT_DIR/Makefile
